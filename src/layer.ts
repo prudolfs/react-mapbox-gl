@@ -216,6 +216,8 @@ export default class Layer extends React.Component<Props> {
       return;
     }
 
+    map.off('styledata', this.onStyleDataChange);
+
     if (map.getLayer(id)) {
       map.removeLayer(id);
     }
@@ -229,10 +231,8 @@ export default class Layer extends React.Component<Props> {
       const normalizedImages = !Array.isArray(images[0]) ? [images] : images;
       (normalizedImages as ImageDefinitionWithOptions[])
         .map(([key, ...rest]) => key)
-        .forEach(map.removeImage);
+        .forEach(map.removeImage.bind(map));
     }
-
-    map.off('styledata', this.onStyleDataChange);
   }
 
   public componentWillReceiveProps(props: Props) {
